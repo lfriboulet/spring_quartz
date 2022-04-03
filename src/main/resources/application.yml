@@ -1,0 +1,41 @@
+server:
+  port: 8181
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:quartz;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: sa
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: ALWAYS
+      wait-for-jobs-to-complete-on-shutdown: true
+    #    overwrite-existing-jobs: true
+    properties:
+      org:
+        quartz:
+          jobStore:
+            useProperties: true
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            dataSource: myDS
+            tablePrefix: QRTZ_
+          dataSource:
+            myDS:
+              driver: org.h2.Driver
+              URL: jdbc:h2:mem:quartz;
+              user: sa
+              password: sa
+              provider: hikaricp
+          scheduler:
+            instanceName: scheduler
+            instanceId: AUTO
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 5
